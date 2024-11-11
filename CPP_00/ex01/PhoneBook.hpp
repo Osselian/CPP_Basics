@@ -10,7 +10,7 @@ class PhoneBook
 		int _addInd;
 		void PrintContacts(void);
 		bool CheckAlNum(const char *str);
-		std::string GetValue(const char *mes);
+		bool TryGetValue(const char *mes, std::string &buff);
 
 	public:
 		PhoneBook() {_addInd = 0;}

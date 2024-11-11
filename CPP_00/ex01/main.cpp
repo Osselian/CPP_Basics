@@ -26,6 +26,8 @@ int	main(void)
 	{
 		std::cout << "Enter command: ";
 		std::getline(std::cin , command);
+		if (std::cin.eof())
+			break;
 
 		switch (findCommand(command)) 
 		{
@@ -36,12 +38,13 @@ int	main(void)
 				phoneBook.Search();
 				break;
 			case 2:
-				return (0);
-				break;
+				return 0;
 			default:
 				std::cout << "Invalid command!" << std::endl;
 				break;
 		}
+		if (std::cin.eof())
+			break;
 	}
 	return 0;
 }

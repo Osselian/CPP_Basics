@@ -1,14 +1,13 @@
-#include <cstring>
+#include <cctype>
 #include <iostream>
-#include <ctype.h>
 
-char	*strtoupper(char *str)
+std::string strtoupper(std::string str)
 {
 	int len;
 
-	len = strlen(str);
+	len = str.length();
 	for (int i = 0; i < len; i++)
-		str[i] = toupper(str[i]);
+		str[i] = std::toupper(str[i]);
 	return (str);
 }
 
@@ -19,7 +18,7 @@ int	main(int argc, char **argv)
 	else 
 	{
 		for (int i = 1; i < argc; i++)
-			std::cout << strtoupper(argv[i]) << " ";
+			std::cout << strtoupper(argv[i]);
 		std::cout << std::endl;
 	}
 	return (0);
