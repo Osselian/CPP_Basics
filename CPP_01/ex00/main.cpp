@@ -5,7 +5,7 @@ Zombie *newZombie(std::string name)
 	Zombie *newZombie;
 
 	newZombie = new Zombie();
-	newZombie->SetName(name);
+	newZombie->setName(name);
 
 	return (newZombie);
 }
@@ -13,14 +13,14 @@ Zombie *newZombie(std::string name)
 void randomChump(std::string name)
 {
 	Zombie random;
-	random.SetName(name);
-	random.Say();
+	random.setName(name);
+	random.announce();
 }
 
 int main(void)
 {
 	Zombie *marv = newZombie("Marvin");
-	marv->Say();
+	marv->announce();
 	delete marv;
 	randomChump("Victor");
 
