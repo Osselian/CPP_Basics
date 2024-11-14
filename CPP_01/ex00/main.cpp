@@ -1,13 +1,9 @@
 #include "Zombie.hpp"
+#include <string>
 
 Zombie *newZombie(std::string name)
 {
-	Zombie *newZombie;
-
-	newZombie = new Zombie();
-	newZombie->setName(name);
-
-	return (newZombie);
+	return (new Zombie(name));
 }
 
 void randomChump(std::string name)
@@ -19,10 +15,13 @@ void randomChump(std::string name)
 
 int main(void)
 {
-	Zombie *marv = newZombie("Marvin");
+	std::string name = "Marvin";
+	Zombie *marv = newZombie(name);
+	marv->announce();
+	name = "Victor";
+	randomChump(name);
+
 	marv->announce();
 	delete marv;
-	randomChump("Victor");
-
 	return (0);
 }

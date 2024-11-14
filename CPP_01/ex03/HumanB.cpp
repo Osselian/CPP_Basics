@@ -2,9 +2,8 @@
 #include "Weapon.hpp"
 #include <iostream>
 
-HumanB::HumanB(std::string name)
+HumanB::HumanB(std::string &name) : _name(name)
 {
-	_name = name;
 }
 
 void HumanB::attack()

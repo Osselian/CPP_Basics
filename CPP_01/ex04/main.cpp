@@ -8,14 +8,11 @@ void replace(std::ifstream &from, std::ofstream &to, std::string toReplace,
 {
 	std::string buf;
 	size_t pos;
-	int i = 0;
 
 	while (std::getline(from, buf))
 	{
-		if (i != 0)
-			to << std::endl;
 		pos = 0;
-		while (pos != std::string::npos)
+		while (toReplace.length() > 0 && pos != std::string::npos)
 		{
 			pos = buf.find(toReplace);
 			if (pos != std::string::npos)
@@ -25,7 +22,7 @@ void replace(std::ifstream &from, std::ofstream &to, std::string toReplace,
 			}
 		}
 		to << buf;
-		i++;
+		to << std::endl;
 	}
 }
 
