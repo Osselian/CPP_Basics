@@ -14,11 +14,12 @@ void replace(std::ifstream &from, std::ofstream &to, std::string toReplace,
 		pos = 0;
 		while (toReplace.length() > 0 && pos != std::string::npos)
 		{
-			pos = buf.find(toReplace);
+			pos = buf.find(toReplace, pos);
 			if (pos != std::string::npos)
 			{
 				buf.erase(pos, toReplace.length());
 				buf.insert(pos, replaceWith);
+				pos += replaceWith.length();
 			}
 		}
 		to << buf;

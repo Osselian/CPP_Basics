@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = Zombie.cpp main.cpp
+SRC = Zombie.cpp main.cpp newZombie.cpp randomChump.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
