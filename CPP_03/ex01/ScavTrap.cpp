@@ -2,6 +2,15 @@
 #include "ClapTrap.hpp"
 #include <iostream>
 
+ScavTrap::ScavTrap()
+{
+	// handle empty name if needed
+	_attackDmg = 20;
+	_energy = 50;
+	_hitPoints = 100;
+	std::cout << "ClapTrap default constructor called." << std::endl;
+}
+
 ScavTrap::ScavTrap(const std::string &name) : ClapTrap(name)
 {
 	_attackDmg = 20;

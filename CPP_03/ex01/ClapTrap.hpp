@@ -11,6 +11,7 @@ class ClapTrap
 		unsigned int _attackDmg;
 		void doAttack(const std::string &type, const std::string &target);
 	public:
+		ClapTrap();
 		ClapTrap(const std::string &name);
 		ClapTrap(const ClapTrap &origin);
 		const ClapTrap &operator=(const ClapTrap &other);
