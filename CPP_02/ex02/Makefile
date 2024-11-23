@@ -1,8 +1,8 @@
 NAME = fixed
 C = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98 
-FLAGS += -g 
-FLAGS += -fsanitize=address
+FLAGS = #-Wall -Wextra -Werror #-std=c++98 
+#FLAGS += -g 
+#FLAGS += -fsanitize=address
 
 SRC = main.cpp Fixed.cpp
 OBJ = $(SRC:.cpp=.o)

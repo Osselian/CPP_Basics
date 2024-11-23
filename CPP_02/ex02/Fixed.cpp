@@ -1,4 +1,5 @@
 #include "Fixed.hpp"
+#include <cmath>
 #include <iostream>
 
 Fixed::Fixed()
@@ -14,6 +15,7 @@ Fixed::Fixed(int const val) : _val(val << _frac)
 
 Fixed::Fixed(float const val) : _val(static_cast<int>(val * (1 << _frac)))
 {
+	_val = roundf(val * (1 << _frac));
 	// std::cout << "Constructor with float argument called" << std::endl;
 }
 

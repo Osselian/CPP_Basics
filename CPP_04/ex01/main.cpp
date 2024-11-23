@@ -30,23 +30,23 @@ int main()
 	delete wrongAnimal;
 	delete wrongCat;
 
-	Animal *animals[4];
-	std::cout <<std::endl;
-	for (int i = 0; i < 2; i++)
-	{
-		animals[i] = new Cat();
-	}
-	for (int i = 2; i < 4; i++)
-	{
-		animals[i] = new Dog();
-	}
-	std::cout <<std::endl;
-	for (int i = 0; i < 4; i++)
-	{
-		std::cout << "Animal: type - " << animals[i]->getType() << ", sound";
-        animals[i]->makeSound();
-		delete animals[i];
-    }
+	//Animal *animals[4];
+	//std::cout <<std::endl;
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	animals[i] = new Cat();
+	//}
+	//for (int i = 2; i < 4; i++)
+	//{
+	//	animals[i] = new Dog();
+	//}
+	//std::cout <<std::endl;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	std::cout << "Animal: type - " << animals[i]->getType() << ", sound";
+    //    animals[i]->makeSound();
+	//	delete animals[i];
+    //}
 
 	std::cout <<std::endl;
 	std::cout << "Korgy test" <<std::endl;
@@ -57,20 +57,20 @@ int main()
 
 	std::cout << std::endl << "Rex test" <<std::endl;
 	Dog rex(korgy);
-	// Animal animals[4];
-	// std::cout <<std::endl;
-	// for (int i = 0; i < 2; i++)
-	// {
-	// 	animals[i] = *new Cat();
-	// }
-	// for (int i = 2; i < 4; i++)
-	// {
-	// 	animals[i] = *new Dog();
-	// }
-	// for (int i = 0; i < 4; i++)
-	// {
-	// 	std::cout << "Animal: type - " << animals[i].getType() << ", sound";
-    //     animals[i].makeSound();
-	// 	// delete &animals[i];
-    // }
+	 Animal animals[4];
+	 std::cout <<std::endl;
+	 for (int i = 0; i < 2; i++)
+	 {
+	 	animals[i] = *new Cat();
+	 }
+	 for (int i = 2; i < 4; i++)
+	 {
+	 	animals[i] = *new Dog();
+	 }
+	 for (int i = 0; i < 4; i++)
+	 {
+	 	std::cout << "Animal: type - " << animals[i].getType() << ", sound";
+         animals[i].makeSound();
+	 	// delete &animals[i];
+     }
 }

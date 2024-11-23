@@ -10,6 +10,7 @@ class ClapTrap
 		unsigned int _energy;
 		unsigned int _attackDmg;
 	public:
+		ClapTrap();
 		ClapTrap(const std::string &name);
 		ClapTrap(const ClapTrap &origin);
 		const ClapTrap &operator=(const ClapTrap &other);

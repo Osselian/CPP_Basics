@@ -1,4 +1,5 @@
 #include "Fixed.hpp"
+#include <cmath>
 #include <iostream>
 
 Fixed::Fixed()
@@ -12,8 +13,9 @@ Fixed::Fixed(int const val) : _val(val << _frac)
 	std::cout << "Constructor with int argument called" << std::endl;
 }
 
-Fixed::Fixed(float const val) : _val(static_cast<int>(val * (1 << _frac)))
+Fixed::Fixed(float const val)
 {
+	_val = roundf(val * (1 << _frac));
 	std::cout << "Constructor with float argument called" << std::endl;
 }
 
@@ -50,7 +52,7 @@ void Fixed::setRawBits(int const raw)
 
 float Fixed::toFloat(void) const
 {
-	float res = static_cast<float>(_val) / (1 << _frac);
+	float res = (float)(_val) / (1 << _frac);
 	
 	return res;
 }
