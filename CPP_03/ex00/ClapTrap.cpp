@@ -1,7 +1,8 @@
 #include "ClapTrap.hpp"
+#include <climits>
 #include <iostream>
 
-ClapTrap::ClapTrap()
+ClapTrap::ClapTrap() : _name("unspecified"), _hitPoints(10), _energy(10), _attackDmg(0)
 {
 	std::cout << "ClapTrap default constructor called\n";
 }
@@ -75,11 +76,25 @@ void ClapTrap::beRepaired(unsigned int amount)
 	if (_energy > 0 && _hitPoints > 0)
 	{
 		_energy--;	
-		_hitPoints += amount;
+		if (_hitPoints + amount < _hitPoints)
+		{
+			_hitPoints = UINT_MAX;
+			amount = UINT_MAX - _hitPoints;
+		}
+		else
+			_hitPoints += amount;
 		std::cout << "ClapTrap " << _name << " repair " << amount << " hit points!" << std::endl;;
 	}
 	else if (_energy == 0)
 		std::cout << "ClapTrap " << _name << " can't repair, no energy! " << std::endl;
 	else
 		std::cout << "ClapTrap " << _name << " can't repair, no hit points! " << std::endl;
+}
+
+void ClapTrap::showStats(void) const
+{
+	std::cout << "Name: " << _name << std::endl;
+	std::cout << "Hit points: " << _hitPoints << std::endl;
+	std::cout << "Energy: " << _energy << std::endl;
+	std::cout << "Attack damage: " << _attackDmg << std::endl << std::endl;
 }

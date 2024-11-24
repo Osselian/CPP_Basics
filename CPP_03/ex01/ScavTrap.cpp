@@ -4,11 +4,10 @@
 
 ScavTrap::ScavTrap()
 {
-	// handle empty name if needed
 	_attackDmg = 20;
 	_energy = 50;
 	_hitPoints = 100;
-	std::cout << "ClapTrap default constructor called." << std::endl;
+	std::cout << "ScavTrap default constructor called." << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string &name) : ClapTrap(name)
@@ -36,7 +35,7 @@ ScavTrap::~ScavTrap()
 	std::cout << "ScavTrap " << _name << " destroyed." << std::endl;
 }
 
-void ScavTrap::guardGate()
+void ScavTrap::guardGate() const
 {
 	std::cout << "ScavTrap " << _name << " is now in Gate keeper mode." << std::endl;
 }
