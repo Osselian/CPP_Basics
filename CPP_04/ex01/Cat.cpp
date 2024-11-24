@@ -19,6 +19,7 @@ const Cat &Cat::operator=(const Cat &other)
 {
 	*brain = *(other.brain);
 	Animal::operator=(other);
+	std::cout << "Cat assignment operator called!" << std::endl;
 	return *this;
 }
 

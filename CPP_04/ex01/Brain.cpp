@@ -18,9 +18,12 @@ Brain::Brain(const Brain &origin)
 
 const Brain &Brain::operator=(const Brain &other)
 {
-	for (int i = 0; i < 100; i++)
+	if (this != &other)
 	{
-		ideas[i] = other.ideas[i];
+		for (int i = 0; i < 100; i++)
+		{
+			ideas[i] = other.ideas[i];
+		}
 	}
 	std::cout << "Brain assignement operator called!" << std::endl;
 	return *this;
