@@ -4,7 +4,6 @@
 
 ScavTrap::ScavTrap()
 {
-	// handle empty name if needed
 	_attackDmg = 20;
 	_energy = 50;
 	_hitPoints = 100;
@@ -36,7 +35,7 @@ ScavTrap::~ScavTrap()
 	std::cout << "ScavTrap " << _name << " destroyed." << std::endl;
 }
 
-void ScavTrap::guardGate() const
+void ScavTrap::guardGate()
 {
 	std::cout << "ScavTrap " << _name << " is now in Gate keeper mode." << std::endl;
 }
