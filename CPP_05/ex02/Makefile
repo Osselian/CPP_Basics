@@ -1,4 +1,4 @@
-NAME = bureaucratSign 
+NAME = bureaucratExec 
 C = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98 
 FLAGS += -g 

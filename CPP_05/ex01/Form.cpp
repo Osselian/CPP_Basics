@@ -34,7 +34,8 @@ Form::Form(const Form &origin):
 }
 const Form &Form::operator=(const Form &other)
 {
-	_isSigned = other._isSigned;
+	if (this != &other)
+		_isSigned = other._isSigned;
 	return *this;
 }
 

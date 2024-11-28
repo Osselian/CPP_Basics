@@ -25,11 +25,14 @@ Bureaucrat::Bureaucrat(const Bureaucrat &origin): _name(origin._name)
 }
 const Bureaucrat &Bureaucrat::operator=(const Bureaucrat &other)
 {
-	if (other._grade == 0)
-		throw GradeToHighException();
-	if (other._grade > 150)
-		throw GradeToLowException();
-	_grade = other._grade;
+	if (this != &other)
+	{
+		if (other._grade == 0)
+			throw GradeToHighException();
+		if (other._grade > 150)
+			throw GradeToLowException();
+		_grade = other._grade;
+	}
 	return *this;
 }
 
