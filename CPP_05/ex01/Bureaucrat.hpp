@@ -2,21 +2,25 @@
 # define BUREAUCRAT
 
 #include <string>
+
+typedef std::string string;
+
 class Bureaucrat
 {
 	private:
-		const std::string _name;
+		const string _name;
 		unsigned int _grade; 
 	public:
 		Bureaucrat();
-		Bureaucrat(const std::string &name, unsigned int grade);
+		Bureaucrat(const string &name, unsigned int grade);
 		Bureaucrat(const Bureaucrat &origin);
 		const Bureaucrat &operator=(const Bureaucrat &other);
 		~Bureaucrat();
-		const std::string getName() const;
+		const string getName() const;
 		unsigned int getGrade() const;
 		void incrementGrade();
 		void decrementGrade();
+		void signForm(const string &form, bool success = true, const string &reason = "") const;
 		
 
 	class GradeToHighException : public std::exception

@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 #include <exception>
 #include <iostream>
 
@@ -42,6 +43,22 @@ int main(void)
 	{
 		std::cout << e.what() << std::endl;
 	}
-	std::cout << b1 << std::endl;
-	std::cout << b2 << std::endl;
+
+	Bureaucrat tom("Tom", 50);
+	Form a;
+	Form b("A1", 1, 1);
+
+	a.beSigned(tom);
+	try
+	{
+		b.beSigned(tom);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	Bureaucrat &linda = *new Bureaucrat("Linda", 150);
+    a.beSigned(linda);
+	delete &linda;
 }

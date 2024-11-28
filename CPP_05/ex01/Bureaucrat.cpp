@@ -61,6 +61,14 @@ void Bureaucrat::decrementGrade()
 	_grade++;
 }
 
+void Bureaucrat::signForm(const string &name, bool success, const string &reason) const
+{
+	if (success)
+		std::cout << _name + " signed " + name << std::endl;
+	else
+		std::cout << _name + " couldn't sign " + name + " because " + reason << std::endl;
+}
+
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &obj)
 {
 	os << obj.getName() << ", bureaucrat grade " << obj.getGrade() ;
