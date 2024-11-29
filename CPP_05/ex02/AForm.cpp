@@ -76,12 +76,9 @@ unsigned int AForm::getGradeToExec() const
 void AForm::beSigned(const Bureaucrat &bureaucrat)
 {
 	if (bureaucrat.getGrade() <= _gradeToSign)
-		bureaucrat.signForm(_name);
+		_isSigned = true;
 	else
-	{
-		bureaucrat.signForm(_name, false, "his grade is too low!");
 		throw GradeToLowException("Unsufficient bureaucrat grade!");
-	}
 }
 
 AForm::GradeToHighException::GradeToHighException() throw()

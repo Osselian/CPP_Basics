@@ -4,7 +4,9 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = main.cpp Bureaucrat.cpp Form.cpp
+SRC = main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp \
+		RobotomyRequestForm.cpp ShrubberyCreationForm.cpp
+
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

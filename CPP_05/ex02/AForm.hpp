@@ -1,8 +1,9 @@
-#ifndef FORM
-# define FORM
+#ifndef AFORM
+# define AFORM
 
-#include "Bureaucrat.hpp"
 #include <string>
+#include "Bureaucrat.hpp"
+
 class AForm
 {
 	protected:
@@ -16,7 +17,7 @@ class AForm
 		AForm(const std::string &name, uint gradeToSign, uint gradeToExec, string target);
 		AForm(const AForm &origin);
 		const AForm &operator=(const AForm &other);
-		~AForm();
+		virtual ~AForm();
 		const std::string getName() const;
 		bool isSigned() const;
 		unsigned int getGradeToSign() const;

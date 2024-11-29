@@ -5,6 +5,7 @@
 
 int main(void)
 {
+	//перенести логику подписывания из ex02!!!
 	Bureaucrat b1;
 	Bureaucrat b2("Bob", 1);
 

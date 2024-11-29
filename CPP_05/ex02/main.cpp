@@ -1,5 +1,7 @@
 #include "Bureaucrat.hpp"
-#include "AForm.hpp"
+#include "PresidentialPardonForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 #include <exception>
 #include <iostream>
 
@@ -45,20 +47,64 @@ int main(void)
 	}
 
 	Bureaucrat tom("Tom", 50);
-	AForm a;
-	AForm b("A1", 1, 1);
+	PresidentialPardonForm pardon;
+	RobotomyRequestForm robotomy("Target");
+	ShrubberyCreationForm &shrub = *new ShrubberyCreationForm("TRGT");
 
-	a.beSigned(tom);
+	Bureaucrat &linda = *new Bureaucrat("Linda", 150);
 	try
 	{
-		b.beSigned(tom);
+    	pardon.beSigned(linda);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+    	robotomy.beSigned(linda);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+    	shrub.beSigned(linda);
 	}
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
 	}
 
-	Bureaucrat &linda = *new Bureaucrat("Linda", 150);
-    a.beSigned(linda);
+
+	Bureaucrat &eric = *new Bureaucrat("Eric", 50);
+	try
+	{
+		eric.executeForm(pardon);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+		eric.signForm(robotomy);
+		eric.executeForm(robotomy);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+		eric.signForm(shrub);
+		eric.executeForm(shrub);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 	delete &linda;
+	delete &shrub;
 }

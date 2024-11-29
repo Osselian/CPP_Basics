@@ -6,6 +6,8 @@
 typedef std::string string;
 typedef unsigned int uint;
 
+class AForm;
+
 class Bureaucrat
 {
 	private:
@@ -21,7 +23,8 @@ class Bureaucrat
 		unsigned int getGrade() const;
 		void incrementGrade();
 		void decrementGrade();
-		void signForm(const string &form, bool success = true, const string &reason = "") const;
+		void signForm(AForm &form) const;
+		void executeForm(AForm const &form) const;
 		
 
 	class GradeToHighException : public std::exception

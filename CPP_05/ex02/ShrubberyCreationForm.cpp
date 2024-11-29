@@ -1,5 +1,4 @@
 #include "ShrubberyCreationForm.hpp"
-#include "AForm.hpp"
 #include <fstream>
 
 ShrubberyCreationForm::ShrubberyCreationForm() 
@@ -35,8 +34,27 @@ void ShrubberyCreationForm::execute(Bureaucrat const &executor) const
 		throw GradeToLowException("Unsufficient bureaucrat grade!");
 
 	string fileName = _target + "_shrubbery"; //move to constructor
-	std::ofstream  file(fileName);
+	std::ofstream  file(fileName.c_str());
 	if (!file.is_open()) 
 		throw TargetFileException("Can't open target file!");
 	file << "shrauberry tree???" << std::endl;
+}
+
+ShrubberyCreationForm::TargetFileException::TargetFileException() throw()
+{
+	message = "Attempt to execute form that has not been signed!";
+}
+
+ShrubberyCreationForm::TargetFileException::TargetFileException(const string &msg) throw()
+{
+	message = msg;
+}
+
+ShrubberyCreationForm::TargetFileException::~TargetFileException() throw()
+{
+}
+
+const char *ShrubberyCreationForm::TargetFileException::what() const throw()
+{
+	return message.c_str();
 }
