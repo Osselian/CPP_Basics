@@ -1,4 +1,5 @@
 #include "Form.hpp"
+#include <iostream>
 
 Form::Form() : _name("Unspecified"), _isSigned(false), _gradeToSign(150), _gradeToExec(150)
 {
@@ -66,12 +67,16 @@ unsigned int Form::getGradeToExec() const
 void Form::beSigned(const Bureaucrat &bureaucrat)
 {
 	if (bureaucrat.getGrade() <= _gradeToSign)
-		bureaucrat.signForm(_name);
+		_isSigned = true;
 	else
-	{
-		bureaucrat.signForm(_name, false, "his grade is too low!");
 		throw GradeToLowException("Unsufficient bureaucrat grade!");
-	}
+}
+
+std::ostream &operator<<(std::ostream &os, const Form &obj)
+{
+	os << "Form " << obj.getName() << ", grade to sign: " << obj.getGradeToSign();
+	os << ", grade to execute: " << obj.getGradeToExec() << std::endl; ;
+	return os;
 }
 
 Form::GradeToHighException::GradeToHighException() throw()

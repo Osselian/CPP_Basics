@@ -1,5 +1,6 @@
 #include "Bureaucrat.hpp"
 #include <exception>
+#include <i386/endian.h>
 #include <iostream>
 
 int main(void)
@@ -27,7 +28,14 @@ int main(void)
 
 	try
 	{
+		std::cout << "b1 name: " << b1.getName() << std::endl;
+		std::cout << "b1 grade: " << b1.getGrade() << std::endl;
+		b1.incrementGrade();
+		std::cout << "b1 grade: " << b1.getGrade() << std::endl;
 		b1.decrementGrade();
+		std::cout << "b1 grade: " << b1.getGrade() << std::endl;
+		b1.decrementGrade();
+		std::cout << "b1 grade: " << b1.getGrade() << std::endl;
 	}
 	catch (std::exception &e)
 	{
@@ -36,7 +44,14 @@ int main(void)
 
 	try
 	{
+		std::cout << "b2 name: " << b2.getName() << std::endl;
+		std::cout << "b2 grade: " << b2.getGrade() << std::endl;
+		b2.decrementGrade();
+		std::cout << "b2 grade: " << b2.getGrade() << std::endl;
 		b2.incrementGrade();
+		std::cout << "b2 grade: " << b2.getGrade() << std::endl;
+		b2.incrementGrade();
+		std::cout << "b2 grade: " << b2.getGrade() << std::endl;
 	}
 	catch (std::exception &e)
 	{

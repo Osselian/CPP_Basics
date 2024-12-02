@@ -1,4 +1,5 @@
 #include "AForm.hpp"
+#include <iostream>
 
 AForm::AForm() : 
 	_name("Unspecified"), 
@@ -79,6 +80,13 @@ void AForm::beSigned(const Bureaucrat &bureaucrat)
 		_isSigned = true;
 	else
 		throw GradeToLowException("Unsufficient bureaucrat grade!");
+}
+
+std::ostream &operator<<(std::ostream &os, const AForm &obj)
+{
+	os << "Form " << obj.getName() << ", grade to sign: " << obj.getGradeToSign();
+	os << ", grade to execute: " << obj.getGradeToExec() << std::endl; ;
+	return os;
 }
 
 AForm::GradeToHighException::GradeToHighException() throw()
