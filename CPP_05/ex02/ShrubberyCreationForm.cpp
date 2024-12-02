@@ -30,7 +30,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const &executor) const
 {
 	if (!_isSigned)
 		throw FormNotSignedException();
-	if (executor.getGrade() <= _gradeToExec)
+	if (executor.getGrade() > _gradeToExec)
 		throw GradeToLowException("Unsufficient bureaucrat grade!");
 
 	string fileName = _target + "_shrubbery"; //move to constructor

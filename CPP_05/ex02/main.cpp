@@ -7,104 +7,110 @@
 
 int main(void)
 {
-	Bureaucrat b1;
-	Bureaucrat b2("Bob", 1);
+	{
+		Bureaucrat tom("Tom", 50);
+		PresidentialPardonForm pardon;
+		RobotomyRequestForm robotomy("Robo");
+		ShrubberyCreationForm &shrub = *new ShrubberyCreationForm("Shrubs");
 
-	try
-	{
-		Bureaucrat b3("Rob", 0);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-
-	try
-	{
-		Bureaucrat b4("Kob", 151);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-
-	try
-	{
-		b1.decrementGrade();
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-
-	try
-	{
-		b2.incrementGrade();
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
+		Bureaucrat &linda = *new Bureaucrat("Linda", 150);
+		try
+		{
+			linda.signForm(pardon);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			linda.signForm(robotomy);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			linda.signForm(shrub);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		delete &linda;
+		delete &shrub;
 	}
 
-	Bureaucrat tom("Tom", 50);
-	PresidentialPardonForm pardon;
-	RobotomyRequestForm robotomy("Target");
-	ShrubberyCreationForm &shrub = *new ShrubberyCreationForm("TRGT");
+	{
+		PresidentialPardonForm pardon;
+		RobotomyRequestForm robotomy("Robo");
+		ShrubberyCreationForm &shrub = *new ShrubberyCreationForm("Shrubs");
 
-	Bureaucrat &linda = *new Bureaucrat("Linda", 150);
-	try
-	{
-    	pardon.beSigned(linda);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-    	robotomy.beSigned(linda);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-    	shrub.beSigned(linda);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
+		Bureaucrat &eric = *new Bureaucrat("Eric", 50);
+		try
+		{
+			eric.executeForm(pardon);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			eric.signForm(robotomy);
+			eric.executeForm(robotomy);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			eric.signForm(shrub);
+			eric.executeForm(shrub);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		delete &eric;
+		delete &shrub;
 	}
 
+	{
+		PresidentialPardonForm pardon;
+		RobotomyRequestForm robotomy("Robo");
+		ShrubberyCreationForm &shrub = *new ShrubberyCreationForm("Shrubs");
 
-	Bureaucrat &eric = *new Bureaucrat("Eric", 50);
-	try
-	{
-		eric.executeForm(pardon);
+		Bureaucrat &rick = *new Bureaucrat("Rick", 1);
+		try
+		{
+			rick.executeForm(pardon);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			rick.signForm(robotomy);
+			rick.executeForm(robotomy);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		try
+		{
+			rick.signForm(shrub);
+			rick.executeForm(shrub);
+		}
+		catch (std::exception &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+		delete &rick;
+		delete &shrub;
 	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		eric.signForm(robotomy);
-		eric.executeForm(robotomy);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
-		eric.signForm(shrub);
-		eric.executeForm(shrub);
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	delete &linda;
-	delete &shrub;
 }
