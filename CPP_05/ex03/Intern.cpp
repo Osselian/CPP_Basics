@@ -1,12 +1,20 @@
 #include "Intern.hpp"
+#include "AForm.hpp"
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
-#include <iostream>
 
 Intern::Intern()
 {
+	_keys[0] = "shrubberry";
+	_keys[1] = "robotomy";
+	_keys[2] = "presidential";
+
+	_funcs[0] = &Intern::makeShrub;
+	_funcs[1] = &Intern::makeRobo;
+	_funcs[2] = &Intern::makePardon;
 }
+
 Intern::Intern(const Intern &)
 {
 }
@@ -19,41 +27,30 @@ Intern::~Intern()
 {
 }
 
-
 AForm *Intern::makeForm(const string &formName, const string &target) const
 {
-	int type = tryGetFormType(formName);
-	if (type >= 0)
+	for (int i = 0; i < 3; i++)
 	{
-		switch (type) 
-		{
-			case 0:
-				return new ShrubberyCreationForm(target);
-			case 1:
-				return new RobotomyRequestForm(target);
-			case 2:
-				return new PresidentialPardonForm(target);
-		}
+		int pos = formName.find(_keys[i]);
+		if (pos != -1)
+			return (this->*_funcs[i])(target);
 	}
 	throw FormTypeNotFoundException();
 }
 
-int Intern::tryGetFormType(const string &formName) const
+AForm *Intern::makeShrub(const string &target) const
 {
-	std::string keys[3] = 
-	{
-		"shrubberry",
-		"robotomy",
-		"presidential"
-	};
-	
-	for (int i = 0; i < 3; i++)
-	{
-		int pos = formName.find(keys[i]);
-		if (pos != -1)
-			return i;
-	}
-	return -1;
+	return new ShrubberyCreationForm(target);
+}
+
+AForm *Intern::makeRobo(const string &target) const
+{
+	return new RobotomyRequestForm(target);
+}
+
+AForm *Intern::makePardon(const string &target) const
+{
+	return new PresidentialPardonForm(target);
 }
 
 Intern::FormTypeNotFoundException::FormTypeNotFoundException() throw()

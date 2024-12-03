@@ -6,7 +6,11 @@
 class Intern
 {
 	private:
-		int tryGetFormType(const string &formName) const;
+		string _keys[3];
+		AForm *(Intern::*_funcs[3])(const string &target) const; 
+		AForm *makeShrub(const string &target) const;
+		AForm *makeRobo(const string &target) const;
+		AForm *makePardon(const string &target) const;
 
 	public:
 		Intern();
