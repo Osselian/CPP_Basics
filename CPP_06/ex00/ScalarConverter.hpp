@@ -2,6 +2,9 @@
 # define SCALAR_CONVERTER
 
 #include <string>
+
+typedef std::string string;
+
 struct ConvertionData
 {
 	char character;
@@ -12,8 +15,16 @@ struct ConvertionData
 
 class ScalarConverter
 {
-	static ConvertionData convert(const std::string lit); 
+	private:
+		ScalarConverter();
+		ScalarConverter(const ScalarConverter &origin);
+		const ScalarConverter &operator=(const ScalarConverter &other);
+		~ScalarConverter();
+		static bool isCharacter(char c);
+		static string getType(const string &lit);
 
+	public:
+		static ConvertionData convert(const string &lit); 
 };
 
 #endif
