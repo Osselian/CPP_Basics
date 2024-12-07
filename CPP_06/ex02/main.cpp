@@ -9,28 +9,28 @@ int main()
 
 	std::cout << "Fist: ";
 	Base *first = Base::generate();
-	Base::identify(first);
+	identify(first);
 	
 	std::cout << "Second: ";
 	Base *second = Base::generate();
-	Base::identify(second);
+	identify(second);
 
 	std::cout << "Third: ";
 	Base *third = Base::generate();
-	Base::identify(third);
+	identify(third);
 
 
 	std::cout << "Fourth: ";
 	Base &fourth = *Base::generate();
-	Base::identify(fourth);
+	identify(fourth);
 	
 	std::cout << "Fifth: ";
 	Base &fifth = *Base::generate();
-	Base::identify(fifth);
+	identify(fifth);
 
 	std::cout << "Six: ";
 	Base &six = *Base::generate();
-	Base::identify(six);
+	identify(six);
 
 	delete first;
 	delete second;

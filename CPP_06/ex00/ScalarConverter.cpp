@@ -1,7 +1,7 @@
 #include "ScalarConverter.hpp"
+#include "TypeNotFoundException.hpp"
 #include <cctype>
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -42,7 +42,7 @@ void ScalarConverter::convert(const std::string &lit)
 	}
 }
 
-int ScalarConverter::getType(const string &lit)
+int getType(const string &lit)
 {
 	bool isFloating = false;
 	int length = lit.length();
@@ -76,7 +76,7 @@ int ScalarConverter::getType(const string &lit)
 	return 1;
 }
 
-void ScalarConverter::handleChar(const string &lit)
+void handleChar(const string &lit)
 {
 	int i = static_cast<int>(lit[0]);
 	float f = static_cast<double>(lit[0]);
@@ -85,7 +85,7 @@ void ScalarConverter::handleChar(const string &lit)
 	printValues(lit[0], i, f, d);
 }
 
-void ScalarConverter::handleInt(const string &lit)
+void handleInt(const string &lit)
 {
 	std::cout << "type - int" << std::endl;
 	int i = std::atoi(lit.c_str());
@@ -95,7 +95,7 @@ void ScalarConverter::handleInt(const string &lit)
 	printValues(c, i, f, d);
 }
 
-void ScalarConverter::handleFloat(const string &lit)
+void handleFloat(const string &lit)
 {
 	std::cout << "type - float" << std::endl;
 	float f = static_cast<float>(std::atof(lit.c_str()));
@@ -105,7 +105,7 @@ void ScalarConverter::handleFloat(const string &lit)
 	printValues(c, i, f, d);
 }
 
-void ScalarConverter::handleDouble(const string &lit)
+void handleDouble(const string &lit)
 {
 	std::cout << "type - double" << std::endl;
 	double d = std::atof(lit.c_str());
@@ -115,21 +115,27 @@ void ScalarConverter::handleDouble(const string &lit)
 	printValues(c, i, f, d);
 }
 
-int ScalarConverter::checkSpec(const string &lit)
+int checkSpec(const string &lit)
 {
 	switch (getSpecType(lit)) 
 	{
 		case 0:
+			handleInf(0, 0);
+			return 1;
 		case 1:
-			handleInf( 0);
+			handleInf( 1,0);
 			return 1;
 		case 2:
+			handleInf(0, 1);
+			return 1;
 		case 3:
-			handleInf( 1);
+			handleInf( 1,1);
 			return 1;
 		case 4:
+			handleNan(0);
+			return 1;
 		case 5:
-			handleNan();
+			handleNan(1);
 			return 1;
 		case 6:
 			return 1;
@@ -137,7 +143,7 @@ int ScalarConverter::checkSpec(const string &lit)
 	return 0;
 }
 
-int ScalarConverter::getSpecType(const string &lit)
+int getSpecType(const string &lit)
 {
 	string specials[6] = 
 	{
@@ -157,19 +163,26 @@ int ScalarConverter::getSpecType(const string &lit)
 	return -1;
 }
 
-void ScalarConverter::handleInf(int sign)
+void handleInf(int type, int sign)
 {
 	double d;
 	float f;
-	if (sign)
+
+	if (type)
 	{
-		f = +INFINITY;
-		d = std::numeric_limits<double>::infinity();
+		if (sign)
+			d = std::numeric_limits<double>::infinity();
+		else
+			d = -std::numeric_limits<double>::infinity();
+		f = static_cast<float>(d);
 	}
 	else
 	{
-		f = -INFINITY;
-		d = -std::numeric_limits<double>::infinity();
+		if (sign)
+			f = +INFINITY;
+		else
+			f = -INFINITY;
+		d = static_cast<double>(f);
 	}
 	std::cout << "character: impossible" << std::endl;
 	std::cout << "integer: impossible" << std::endl;
@@ -178,10 +191,20 @@ void ScalarConverter::handleInf(int sign)
 	std::cout << "double: " << d << std::endl;
 }
 
-void ScalarConverter::handleNan()
+void handleNan(int type)
 {
-	double d = std::numeric_limits<double>::quiet_NaN();
-	float f = NAN;
+	float f;
+	double d;
+	if (type)
+	{
+		d = std::numeric_limits<double>::quiet_NaN();
+		f = static_cast<float>(d);
+	}
+	else
+	{
+		f = NAN;
+		d = static_cast<double>(f);
+	}
 	std::cout << "character: impossible" << std::endl;
 	std::cout << "integer: impossible" << std::endl;
 	std::cout << "float: " << std::fixed << std::setprecision(3);
@@ -189,7 +212,7 @@ void ScalarConverter::handleNan()
 	std::cout << "double: " << d << std::endl;
 }
 
-void ScalarConverter::printValues(char c, int i, float f, double d)
+void printValues(char c, int i, float f, double d)
 {
 	if (std::isprint(c))
 		std::cout << "character: " << c << std::endl;
@@ -201,14 +224,9 @@ void ScalarConverter::printValues(char c, int i, float f, double d)
 	std::cout << "double: " << d << std::endl;
 }
 
-bool ScalarConverter::isCharacter(char c) 
+bool isCharacter(char c) 
 {
 	if (std::isalpha(c) || std::isspace(c) || std::ispunct(c))
 		return true;
 	return false;
-}
-
-const char *ScalarConverter::TypeNotFoundException::what() const throw()
-{
-	return "Type not found!";
 }

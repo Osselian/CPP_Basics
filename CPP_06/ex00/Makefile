@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = main.cpp ScalarConverter.cpp
+SRC = main.cpp ScalarConverter.cpp TypeNotFoundException.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

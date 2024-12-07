@@ -1,6 +1,5 @@
 #include "ScalarConverter.hpp"
 #include <exception>
-#include <iomanip>
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -20,4 +19,5 @@ int main(int argc, char **argv)
 	{
 		std::cout << e.what() << std::endl;
 	}
+
 }
