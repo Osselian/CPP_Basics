@@ -5,7 +5,6 @@ FLAGS += -g
 FLAGS += -fsanitize=address
 
 SRC = main.cpp 
-
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
