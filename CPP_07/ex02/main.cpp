@@ -1,6 +1,7 @@
 #include "Array.hpp"
 #include <exception>
 #include <iostream>
+#include <cstdlib>
 
 #define MAX_VAL 750
 
@@ -70,11 +71,32 @@ void myTest()
 		std::cout << e.what() << std::endl;	 	
 	}
 
+	try
+	{
+		znums = *allocted;
+		znums[0] = 10;
+		std::cout << "znums[0]: " << znums[0] << ", allocted[0]: ";
+		std::cout << (*allocted)[0] << std::endl;
+	} 
+	catch (std::exception &e) 
+	{
+		std::cout << e.what() << std::endl;	 	
+	}
+
+	{
+		Array<int> nums;
+	}
+
+	int *a = new int();
+	std::cout << "int is " << *a << std::endl;
+	delete allocted;
+	delete a;
+
 }
 
 int main()
 {
-	//myTest();
+	myTest();
 	Array<int> numbers(MAX_VAL);
     int* mirror = new int[MAX_VAL];
     srand(time(NULL));
@@ -122,7 +144,5 @@ int main()
     }
     delete [] mirror;//
 
-
 	return 0;
 }
-

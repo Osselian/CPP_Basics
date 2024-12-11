@@ -12,7 +12,7 @@ class Array
 	public:
 		Array()
 		{
-			arr = new T;
+			arr = new T[0];
 			len = 0;
 		}
 
@@ -20,10 +20,6 @@ class Array
 		{
 			arr = new T[n];
 			len = n;
-			for (unsigned int i = 0; i < len; i++)
-			{
-				arr[i] = *new T;
-			}
 		}
 
 		Array(const Array<T> &origin)
@@ -45,6 +41,7 @@ class Array
 			{
 				arr[i] = other[i];
 			}
+			return *this;
 		}
 
 		~Array()
