@@ -89,6 +89,13 @@ void myTest()
 
 	int *a = new int();
 	std::cout << "int is " << *a << std::endl;
+
+
+	{
+		Array<const std::string> strs(5);
+		std::string first = strs[0];
+		// strs[0] = "a";
+	}
 	delete allocted;
 	delete a;
 
