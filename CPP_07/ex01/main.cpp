@@ -2,32 +2,12 @@
 #include <cctype>
 #include <iostream>
 
-class Awesome
-{
-	public:
-	Awesome( void ) : _n( 42 ) { return; }
-	int get( void ) const { return this->_n; }
-	private:
-	int _n;
-};
-
-std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) 
-{ 
-	o << rhs.get(); return o; 
-}
-
-template< typename T >
-void print(T const &x) 
-{
-	std::cout << x << std::endl; return; 
-}
-
 void print_inc(int const &i)
 {
 	std::cout << "NUM: " << i + 1 << std::endl;
 }
 
-void print_str(std::string const &str)
+void print_upper(std::string const &str)
 {
 	std::string upper = str;
 	for (unsigned long i = 0; i < str.length(); i++) 
@@ -35,6 +15,21 @@ void print_str(std::string const &str)
 		upper[i] = std::toupper(str[i]);
     }
 	std::cout <<"STR: " << upper << std::endl;
+}
+
+void print_dec(int &i)
+{
+	std::cout << "NUM: " << i - 1 << std::endl;
+}
+
+void print_lower(std::string &str)
+{
+	std::string lower = str;
+	for (unsigned long i = 0; i < str.length(); i++) 
+	{
+		lower[i] = std::tolower(str[i]);
+    }
+	std::cout <<"STR: " << lower << std::endl;
 }
 
 int main()
@@ -52,12 +47,14 @@ int main()
 	};
 
 	iter(nums, 4, print_inc);
-	iter(strs, 2, print_str);
+	iter(strs, 2, print_upper);
+	iter(nums, 4, print_dec);
+	iter(strs, 2, print_lower);
 
-	int tab[] = { 0, 1, 2, 3, 4 }; 
-	Awesome tab2[5];
-	iter( tab, 5, print );
-	iter( tab2, 5, print );
+	int *num = NULL;
+	iter(num, 4, print_inc);
 
+	void (*func)(int &) = NULL;
+	iter(nums, 4, func);
 	return 0;
 }
