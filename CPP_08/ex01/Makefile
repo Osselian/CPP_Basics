@@ -1,10 +1,10 @@
-NAME = easyfind 
+NAME = span 
 C = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98 
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = main.cpp 
+SRC = main.cpp Span.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
