@@ -25,11 +25,14 @@ Span::Span(const Span &origin) : _capacity(origin._capacity)
 
 const Span &Span::operator=(const Span &other)
 {
-	delete _container;
-	_capacity = other._capacity;
-	_container = new std::vector<int>(*other._container);
-	_current = other._current;
-	return *this;
+	if (this != &other)
+	{
+		delete _container;
+		_capacity = other._capacity;
+        _container = new std::vector<int>(*other._container);
+        _current = other._current;
+    }
+    return *this;
 }
 
 Span::~Span()
@@ -47,12 +50,16 @@ void Span::addNumber(int numb)
 
 unsigned int Span::shortestSpan() const
 {
+	if (_current <= 1)
+		throw std::exception();
 	std::vector<int> res = getSpan();
 	return *std::min_element(res.begin(), res.end());
 }
 
 unsigned int Span::longestSpan() const
 {
+	if (_current <= 1)
+		throw std::exception();
 	std::vector<int> res = getSpan();
 	return *std::max_element(res.begin(), res.end());
 }
@@ -79,8 +86,6 @@ std::vector<int> Span::getSpan() const
 
 void Span::fill_range(iter start, iter end)
 {
-	int cap = _container->capacity();
-	std::cout << "cap: " << cap << std::endl;
 	unsigned int dist = std::distance(start, end);
 	if (dist  > _capacity - _current)
 		throw std::exception();
