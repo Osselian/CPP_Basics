@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = main.cpp Span.cpp
+SRC = main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
