@@ -24,10 +24,11 @@ class MutantStack
 		void push(const T &value);
 		void pop();
 
+		class iterator;
+
 		typename MutantStack<T, Container>::iterator begin();
 		typename MutantStack<T, Container>::iterator end();
 
-		class iterator;
 
 };
 
