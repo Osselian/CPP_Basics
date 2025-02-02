@@ -13,6 +13,7 @@ class BitcoinExchange
 	private:
 		std::map<time_t, uint> _currencyMap;
 		time_t tryGetDate(string dtStr);
+		bool isLeapYear(long year);
 	public:
 		BitcoinExchange();
 		BitcoinExchange(string fileName);
@@ -38,5 +39,3 @@ class BitcoinExchange::InvalidFileFormatException : public std::exception
 	public:
 		virtual const char *what() const throw();
 };
-
-#endif

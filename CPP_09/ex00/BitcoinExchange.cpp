@@ -56,20 +56,64 @@ std::map<time_t, uint> BitcoinExchange:: getMap(string fileName)
 time_t BitcoinExchange::tryGetDate(string dtStr)
 {
 	tm date;
-	size_t start = 0;
-	for (uint i = 0; i < 2; i ++)
+	std::map<int, int> daysInMonths =
 	{
-		size_t end = dtStr.find('-', end);
-		if (end == string::npos)
-			throw InvalidFileFormatException();
-		string dateConstr(dtStr, start, end);
-		if (i == 0)
-		{
-			int year = std::atoi(dateConstr.c_str());
-			if (year < 0)
-				throw InvalidFileFormatException();
-		}
-	}
+		{0, 31},
+		{1, 28},
+		{2, 31},
+		{3, 30},
+		{4, 31},
+		{5, 30},
+		{6, 31},
+		{7, 31},
+		{8, 30},
+		{9, 31},
+		{10, 30},
+		{11, 31},
+	};
+	size_t start = 0;
+	char *divPtr;
+	long year = std::strtol(dtStr.c_str(), &divPtr, 10);
+	//TODO - проверить на переполнение
+	if (year < 1900)
+		throw InvalidFileFormatException();
+	date.tm_year = year - 1900;
+
+	long month = std::strtol(divPtr, &divPtr, 10);
+	//TODO - проверить на переполнение
+	if (month < 1 || month > 12)
+		throw InvalidFileFormatException();
+	date.tm_mon = month - 1;
+
+	long day = std::strtol(divPtr, &divPtr, 10);
+	//TODO - проверить на переполнение
+	int maxVal = daysInMonths[month];
+	if (month == 1 && isLeapYear(year))
+		maxVal = 29;
+	if (day < 1 || month > maxVal)
+		throw InvalidFileFormatException();
+	date.tm_mday = day;
+
+	return std::mktime(&date);
+
+	//for (uint i = 0; i < 2; i ++)
+	//{
+	//	size_t end = dtStr.find('-', end);
+	//	if (end == string::npos)
+	//		throw InvalidFileFormatException();
+	//	string dateConstr(dtStr, start, end);
+	//	if (i == 0)
+	//	{
+	//		int year = std::strtol(dateConstr.c_str(), dateConstr.c_str() + end, 10);
+	//		if (year < 0)
+	//			throw InvalidFileFormatException();
+	//	}
+	//}
+}
+
+bool BitcoinExchange::isLeapYear(long year) 
+{
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
 const char *BitcoinExchange::InvalidFileFormatException::what() const throw()
