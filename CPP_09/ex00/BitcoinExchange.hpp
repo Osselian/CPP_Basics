@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <ctime>
 
 typedef std::string string;
 typedef unsigned int uint;
@@ -10,28 +11,29 @@ typedef unsigned int uint;
 class BitcoinExchange
 {
 	private:
-		std::map<string, uint> _currencyMap;
+		std::map<time_t, uint> _currencyMap;
+		time_t tryGetDate(string dtStr);
 	public:
 		BitcoinExchange();
 		BitcoinExchange(string fileName);
 		BitcoinExchange(const BitcoinExchange &origin);
-		const BitcoinExchange &BitcoinExchange:: operator=(const BitcoinExchange &other);
+		const BitcoinExchange &operator=(const BitcoinExchange &other);
 		~BitcoinExchange();
-
-		std::map<string, uint> getMap(string fileName);
-		void printCurrency(string fileName);
 
 		class InvalidFilePathException;
 		class InvalidFileFormatException;
+		std::map<time_t, uint> getMap(string fileName);
+		void printCurrency(string fileName);
+
 };
 
-class InvalidFilePathException : public std::exception
+class BitcoinExchange::InvalidFilePathException : public std::exception
 {
 	public:
 		virtual const char *what() const throw();
 };
 
-class InvalidFileFormatException : public std::exception
+class BitcoinExchange::InvalidFileFormatException : public std::exception
 {
 	public:
 		virtual const char *what() const throw();

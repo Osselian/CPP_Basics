@@ -1,5 +1,12 @@
 #include "BitcoinExchange.hpp"
 
+#include <cctype>
+#include <cstddef>
+#include <ctime>
+#include <fstream>
+#include <tuple>
+
+
 BitcoinExchange::BitcoinExchange() : _currencyMap()
 {
 }
@@ -25,7 +32,7 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-std::map<string, uint> getMap(string fileName)
+std::map<time_t, uint> BitcoinExchange:: getMap(string fileName)
 {
 
 	std::ifstream dataStream(fileName);
@@ -39,9 +46,34 @@ std::map<string, uint> getMap(string fileName)
 		div_pos = buf.find(',', 0);
 		if (div_pos == string::npos)
 			throw InvalidFileFormatException();
-		string date(buf, 0, div_pos);
+		string dtStr(buf, 0, div_pos);
 		string currency(buf, div_pos);
-
+		time_t date = tryGetDate(dtStr); 
 	}
 
 }
+
+time_t BitcoinExchange::tryGetDate(string dtStr)
+{
+	tm date;
+	size_t start = 0;
+	for (uint i = 0; i < 2; i ++)
+	{
+		size_t end = dtStr.find('-', end);
+		if (end == string::npos)
+			throw InvalidFileFormatException();
+		string dateConstr(dtStr, start, end);
+		if (i == 0)
+		{
+			int year = std::atoi(dateConstr.c_str());
+			if (year < 0)
+				throw InvalidFileFormatException();
+		}
+	}
+}
+
+const char *BitcoinExchange::InvalidFileFormatException::what() const throw()
+{
+	return "File's data has invalid format!";
+}
+
