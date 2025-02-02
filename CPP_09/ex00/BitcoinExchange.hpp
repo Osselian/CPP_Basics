@@ -11,8 +11,9 @@ typedef unsigned int uint;
 class BitcoinExchange
 {
 	private:
-		std::map<time_t, uint> _currencyMap;
+		std::map<time_t, float> _currencyMap;
 		time_t tryGetDate(string dtStr);
+		float tryGetCurrency(string curStr);
 		bool isLeapYear(long year);
 	public:
 		BitcoinExchange();
@@ -39,3 +40,4 @@ class BitcoinExchange::InvalidFileFormatException : public std::exception
 	public:
 		virtual const char *what() const throw();
 };
+ #endif

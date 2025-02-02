@@ -1,11 +1,8 @@
 #include "BitcoinExchange.hpp"
 
-#include <cctype>
 #include <cstddef>
 #include <ctime>
 #include <fstream>
-#include <tuple>
-
 
 BitcoinExchange::BitcoinExchange() : _currencyMap()
 {
@@ -47,10 +44,21 @@ std::map<time_t, uint> BitcoinExchange:: getMap(string fileName)
 		if (div_pos == string::npos)
 			throw InvalidFileFormatException();
 		string dtStr(buf, 0, div_pos);
-		string currency(buf, div_pos);
+		string curStr(buf, div_pos);
 		time_t date = tryGetDate(dtStr); 
+		uint currency = tryGetCurrency(curStr);
 	}
 
+}
+
+float BitcoinExchange::tryGetCurrency(string curStr)
+{
+	char *end;
+	float res = std::strtof(curStr.c_str(), &end);
+	if (res == 0.0F && (curStr[0] == '0' && curStr[1] == '.' && curStr[0] == '.'))
+	{
+
+	}
 }
 
 time_t BitcoinExchange::tryGetDate(string dtStr)
