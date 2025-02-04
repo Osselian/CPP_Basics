@@ -24,7 +24,7 @@ class BitcoinExchange
 
 		class InvalidFilePathException;
 		class InvalidFileFormatException;
-		std::map<time_t, uint> getMap(string fileName);
+		void setMap(string fileName);
 		void printCurrency(string fileName);
 
 };

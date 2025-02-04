@@ -1,10 +1,10 @@
-NAME = TMNT 
+NAME = btc 
 C = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98 
 FLAGS += -g 
 FLAGS += -fsanitize=address
 
-SRC = main.cpp
+SRC = BitcoinExchange.cpp main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
