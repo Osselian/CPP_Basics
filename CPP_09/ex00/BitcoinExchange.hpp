@@ -12,8 +12,13 @@ class BitcoinExchange
 {
 	private:
 		std::map<time_t, float> _currencyMap;
-		time_t tryGetDate(string dtStr);
-		float tryGetCurrency(string curStr);
+		std::map<int, int> _daysInMonths;
+		void fill_dayMonthsMap();
+		time_t getDate(string dtStr);
+		char *setYear(const char *start, tm & date);
+		char *setMonth(char *start, tm & date);
+		void setDay(char *start, tm & date);
+		float getCurrency(string curStr);
 		bool isLeapYear(long year);
 	public:
 		BitcoinExchange();
@@ -24,6 +29,7 @@ class BitcoinExchange
 
 		class InvalidFilePathException;
 		class InvalidFileFormatException;
+		class ValueConverter;
 		void setMap(string fileName);
 		void printCurrency(string fileName);
 
@@ -40,4 +46,5 @@ class BitcoinExchange::InvalidFileFormatException : public std::exception
 	public:
 		virtual const char *what() const throw();
 };
+
  #endif

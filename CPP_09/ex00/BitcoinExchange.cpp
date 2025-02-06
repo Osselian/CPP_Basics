@@ -1,5 +1,6 @@
 #include "BitcoinExchange.hpp"
 
+#include <cctype>
 #include <cstddef>
 #include <ctime>
 #include <fstream>
@@ -9,15 +10,18 @@
 
 BitcoinExchange::BitcoinExchange()
 {
+	fill_dayMonthsMap();
 }
 
 BitcoinExchange::BitcoinExchange(string fileName)
 {
+	fill_dayMonthsMap();
 	setMap(fileName);
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &origin)
 {
+	_daysInMonths = origin._daysInMonths;
 	_currencyMap = origin._currencyMap;
 }
 
@@ -32,6 +36,23 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
+void BitcoinExchange:: fill_dayMonthsMap()
+{
+	_daysInMonths[0] =  31;
+	_daysInMonths[1] =  28;
+	_daysInMonths[2] =  31;
+	_daysInMonths[3] =  30;
+	_daysInMonths[4] =  31;
+	_daysInMonths[5] =  30;
+	_daysInMonths[6] =  31;
+	_daysInMonths[7] =  31;
+	_daysInMonths[8] =  30;
+	_daysInMonths[9] =  31;
+	_daysInMonths[10] =  30;
+	_daysInMonths[11] =  31;
+
+}
+
 void BitcoinExchange:: setMap(string fileName)
 {
 	std::ifstream dataStream(fileName.c_str());
@@ -43,24 +64,30 @@ void BitcoinExchange:: setMap(string fileName)
 	size_t i = 0;
 	while (std::getline(dataStream, buf))
 	{
-		if (i++ == 0)
-			continue;
 		div_pos = buf.find(',', 0);
-		std::cout << "LINE #" << i  << ": " << buf << ": div pos: " << div_pos << std::endl;
+		// std::cout << "LINE #" << i  << ": " << buf << ": div pos: " << div_pos << std::endl;
 		if (div_pos == string::npos)
 			throw InvalidFileFormatException();
 		string dtStr(buf, 0, div_pos);
 		string curStr(buf, div_pos + 1);
-		time_t date = tryGetDate(dtStr); 
-		uint currency = tryGetCurrency(curStr);
+		if (i++ == 0)
+		{
+			if (dtStr != "date" || curStr != "exchange_rate")
+				throw InvalidFileFormatException();
+			continue;
+		}
+		time_t date = getDate(dtStr); 
+		uint currency = getCurrency(curStr);
 		_currencyMap[date] = currency;
 	}
 }
 
-float BitcoinExchange::tryGetCurrency(string curStr)
+float BitcoinExchange::getCurrency(string curStr)
 {
-	char *end;
 	errno = 0;
+	char *end;
+	if (!std::isdigit(curStr[0]))
+		throw InvalidFileFormatException();
 	float res = std::strtof(curStr.c_str(), &end);
 	// std::cout << "CUR: " << res << ", END: " << end << ", START: " << curStr << std::endl;
 	if (errno == ERANGE || end == curStr || *end != '\0')
@@ -68,53 +95,59 @@ float BitcoinExchange::tryGetCurrency(string curStr)
 	return res;
 }
 
-time_t BitcoinExchange::tryGetDate(string dtStr)
+time_t BitcoinExchange::getDate(string dtStr)
 {
 	tm date;
-	errno = 0;
-	std::map<int, int> daysInMonths;
-	daysInMonths[0] =  31;
-	daysInMonths[1] =  28;
-	daysInMonths[2] =  31;
-	daysInMonths[3] =  30;
-	daysInMonths[4] =  31;
-	daysInMonths[5] =  30;
-	daysInMonths[6] =  31;
-	daysInMonths[7] =  31;
-	daysInMonths[8] =  30;
-	daysInMonths[9] =  31;
-	daysInMonths[10] =  30;
-	daysInMonths[11] =  31;
+	char *next;
+	next = setYear(dtStr.c_str(), date);
+	// std::cout << "REMAINS: " << next << std::endl;
+	next = setMonth(next, date);
+	// std::cout << "REMAINS: " << next << std::endl;
+	setDay(next, date);
 
-	// size_t start = 0;
-	char *divPtr;
-	long year = std::strtol(dtStr.c_str(), &divPtr, 10);
+	// std::cout << "DONE!" << std::endl;
+	return std::mktime(&date);
+}
+
+char *BitcoinExchange:: setYear(const char *start, tm & date)
+{
+	errno = 0;
+	char *end;
+	long year = std::strtol(start, &end, 10);
 	// std::cout << "YEAR: " << year << std::endl;
 	if (errno == ERANGE || year < 1900)
 		throw InvalidFileFormatException();
 	date.tm_year = year - 1900;
+	return end;
+}
 
+char *BitcoinExchange:: setMonth(char *divPtr, tm & date)
+{
+	errno = 0;
 	if (*divPtr != '-')
 		throw InvalidFileFormatException();
-	long month = std::strtol(divPtr + 1, &divPtr, 10);
+	char *end;
+	long month = std::strtol(divPtr + 1, &end, 10);
 	// std::cout << "MON: " << month << std::endl;
 	if (errno == ERANGE || month < 1 || month > 12)
 		throw InvalidFileFormatException();
 	date.tm_mon = month - 1;
+	return end;
+}
 
+void BitcoinExchange:: setDay(char *divPtr, tm & date)
+{
+	errno = 0;
 	if (*divPtr != '-')
 		throw InvalidFileFormatException();
 	long day = std::strtol(divPtr + 1, &divPtr, 10);
-	// std::cout << "DAY: " << day << std::endl;
-	int maxVal = daysInMonths[month - 1];
-	if (month == 1 && isLeapYear(year))
+	std::cout << "DAY: " << day << std::endl;
+	int maxVal = _daysInMonths[date.tm_mon];
+	if (date.tm_mon + 1 == 1 && isLeapYear(date.tm_year + 1900))
 		maxVal = 29;
-	if (errno == ERANGE || day < 1 || month > maxVal)
+	if (errno == ERANGE || *divPtr != '\0' || day < 1 || day > maxVal)
 		throw InvalidFileFormatException();
 	date.tm_mday = day;
-
-	// std::cout << "DONE!" << std::endl;
-	return std::mktime(&date);
 }
 
 bool BitcoinExchange::isLeapYear(long year) 
