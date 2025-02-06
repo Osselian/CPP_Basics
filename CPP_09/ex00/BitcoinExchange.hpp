@@ -19,6 +19,7 @@ class BitcoinExchange
 		char *setMonth(char *start, tm & date);
 		void setDay(char *start, tm & date);
 		float getCurrency(string curStr);
+		float getValue(string curStr);
 		bool isLeapYear(long year);
 	public:
 		BitcoinExchange();
@@ -29,7 +30,6 @@ class BitcoinExchange
 
 		class InvalidFilePathException;
 		class InvalidFileFormatException;
-		class ValueConverter;
 		void setMap(string fileName);
 		void printCurrency(string fileName);
 
