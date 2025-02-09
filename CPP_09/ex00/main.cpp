@@ -17,7 +17,8 @@ int main(int argc, char **argv)
 	try
 	{
 		btcEx.setMap("data.csv");
-		
+		btcEx.printCurrency(argv[1]);
+
 	}
 	catch(const std::exception& e)
 	{
