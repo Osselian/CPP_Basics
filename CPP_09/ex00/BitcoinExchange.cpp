@@ -119,7 +119,7 @@ size_t BitcoinExchange::  getDivPos(string buf)
 {
 	size_t div_pos = buf.find('|', 0);
 	if (div_pos == string::npos)
-		throw InvalidFileFormatException("Invalid string format!\n");
+		throw InvalidFileFormatException("Invalid string format!");
 	return div_pos;
 }
 
@@ -158,10 +158,13 @@ float BitcoinExchange::getCurrency(string curStr)
 	errno = 0;
 	char *end;
 	if (!std::isdigit(curStr[0]))
-		throw InvalidFileFormatException();
+		throw InvalidFileFormatException("Currency value contains invalid symbols!");
 	float res = std::strtof(curStr.c_str(), &end);
 	if (errno == ERANGE || end == curStr || *end != '\0')
-		throw InvalidFileFormatException();
+	{
+		string msg = "Can't convert currency value to float: ";
+		throw InvalidFileFormatException(msg + curStr);
+	}
 	return res;
 }
 
@@ -170,12 +173,15 @@ float BitcoinExchange::getValue(string curStr)
 	errno = 0;
 	char *end;
 	if (!std::isdigit(curStr[0]) && curStr[0] != ' ')
-		throw InvalidFileFormatException();
+		throw InvalidFileFormatException("Currency value contains invalid symbols!");
 	float res = std::strtof(curStr.c_str(), &end);
 	if (res == -0)
 		res = 0;
 	if (errno == ERANGE || end == curStr || *end != '\0' || res < 0.0 || res > 1000)
-		throw InvalidFileFormatException();
+	{
+		string msg = "Can't convert currency value to float: ";
+		throw InvalidFileFormatException(msg + curStr);
+	}
 	return res;
 }
 
@@ -202,7 +208,11 @@ char *BitcoinExchange:: setYear(const char *start, tm * date)
 	char *end;
 	long year = std::strtol(start, &end, 10);
 	if (errno == ERANGE || year < 1900)
-		throw InvalidFileFormatException();
+	{
+		string msg = "Can't properly convert year value: ";
+		msg.append(start, end - start);
+		throw InvalidFileFormatException(msg);
+	}
 	date->tm_year = year;
 	return end;
 }
@@ -211,11 +221,16 @@ char *BitcoinExchange:: setMonth(char *divPtr, tm * date)
 {
 	errno = 0;
 	if (*divPtr != '-')
-		throw InvalidFileFormatException();
+		throw InvalidFileFormatException(
+			"Can't properly convert month value, data row contains invalid symbols!");
 	char *end;
 	long month = std::strtol(divPtr + 1, &end, 10);
 	if (errno == ERANGE || month < 1 || month > 12)
-		throw InvalidFileFormatException();
+	{
+		string msg = "Can't properly convert month value: ";
+		msg.append(divPtr, end - divPtr);
+		throw InvalidFileFormatException(msg);
+	}
 	date->tm_mon = month - 1;
 	return end;
 }
@@ -224,10 +239,16 @@ void BitcoinExchange:: setDay(char *divPtr, tm * date)
 {
 	errno = 0;
 	if (*divPtr != '-')
-		throw InvalidFileFormatException();
-	long day = std::strtol(divPtr + 1, &divPtr, 10);
-	if (checkConversionResult(day, date, divPtr))
-		throw InvalidFileFormatException();
+		throw InvalidFileFormatException(
+			"Can't properly convert day value, data row contains invalid symbols!");
+	char *end;
+	long day = std::strtol(divPtr + 1, &end, 10);
+	if (checkConversionResult(day, date, end))
+	{
+		string msg = "Can't properly convert day value: ";
+		msg.append(divPtr);
+		throw InvalidFileFormatException(msg);
+	}
 	date->tm_mday = day;
 }
 
