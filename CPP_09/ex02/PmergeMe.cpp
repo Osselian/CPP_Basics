@@ -32,7 +32,12 @@ PmergeMe::~PmergeMe()
 std::deque<int> &PmergeMe:: sort(char **args)
 {
 	convert(args);
-	mergeInsertionSort(_unordered);
+	deqp nums = createDeqp();
+	deqp result = mergeInsertionSort(nums);
+	for (size_t i = 0; i < result.size(); i++)
+	{
+		_sorted.push_back(result[i].first);
+	}
 	return _sorted;
 }
 
@@ -43,22 +48,33 @@ void PmergeMe:: convert(char **args)
 		char *end;
 		errno = 0;
 		long num = std::strtol(*args, &end, 10);	
-		if (errno == ERANGE || num < 0 || num > INT_MAX)
+		if (errno == ERANGE || *args == end || num < 0 || num > INT_MAX)
 			throw std::exception();
 		_unordered.push_back(static_cast<int>(num));
 		args++;
 	}	
 }
 
-deqp &PmergeMe:: mergeInsertionSort(deqp & nums)
+deqp PmergeMe:: createDeqp()
+{
+	deqp result;
+	for (size_t i = 0; i < _unordered.size(); i++)
+	{
+		pair item = std::make_pair(_unordered[i], 0);
+		result.push_back(item);
+	}
+	return result;
+}
+
+deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 {
 	size_t amount = nums.size() / 2;
 	deqp winners;
 	deqr losers;
-	for (size_t i = 0; i < nums.size(); i+=2)
+	for (size_t i = 0; i < nums.size() - 1; i+=2)
 	{
 		pair win;
-		int los[3];
+		deqi los(3);
 		if (nums[i].first > nums[i + 1].first)
 		{
 			win = std::make_pair(nums[i].first, i) ;	
@@ -77,15 +93,36 @@ deqp &PmergeMe:: mergeInsertionSort(deqp & nums)
 		losers.push_back(los);
 	}
 	if (amount > 1)
-		mergeInsertionSort(winners);
-	deqp sorted_losers = restore(winners, losers);
-	deqp result;
-	result.push_back(sorted_losers[0]);
-	result.push_back(winners[0]);
+		winners = mergeInsertionSort(winners);
+	if (amount == 1)
+	{
+		pair first = std::make_pair(losers[0][0], losers[0][1]);
+		winners[0].second = losers[0][2];
+		winners.push_front(first);
+		if (amount % 2 == 1)
+		{
+			pair item = nums[nums.size() - 1];
+			int i;
+			if (winners[0].first > item.first)
+				i = 0;
+			else if (winners[0].first < item.first && item.first < winners[0].first)
+				i = 1;
+			else
+				i = 2;
+			item.second = i;
+			winners.insert(winners.begin() + i, item);
+		}
+		return winners;
+	}
 
+	deqp sorted_losers;
+	if (amount != 1)
+		sorted_losers = restore(winners, losers);
+	winners.push_front(sorted_losers[0]);
+	// result.push_back(winners[0]);
 	if (amount % 2 == 1)
 	{
-		winners.push_back(nums[nums.size() - 1]);
+		sorted_losers.push_back(nums[nums.size() - 1]);
 		amount++;
 	}
 	// int resAmount = nums.size();
@@ -96,17 +133,12 @@ deqp &PmergeMe:: mergeInsertionSort(deqp & nums)
 	while (rest > 0)
 	{
 		deqp toInsert = getInsertionGroup(groupLen, last, sorted_losers);
-		binaryInsert(result, toInsert);
+		binaryInsert(winners, toInsert);
+		rest -= groupLen;
+		i++;
+		groupLen = pow(2, i) - groupLen;
 	}
-
-	for (int i = 1; i < amount; i++)
-	{
-
-		result.push_back(winners[i][0]);
-	}
-	for (int i = 0; i < winners.size() - 1; i++)
-	{
-	}
+	return winners;
 }
 
 deqp PmergeMe:: getInsertionGroup(int groupLen, int start, deqp  & nums)
@@ -121,7 +153,7 @@ deqp PmergeMe:: getInsertionGroup(int groupLen, int start, deqp  & nums)
 	return res;
 }
 
-deqp PmergeMe:: binaryInsert(deqp  & result, deqp & group)
+void PmergeMe:: binaryInsert(deqp  & result, deqp & group)
 {
 	size_t size = group.size();
 	
@@ -131,7 +163,7 @@ deqp PmergeMe:: binaryInsert(deqp  & result, deqp & group)
 	}
 }
 
-deqp PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end)
+void PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end)
 {
 	deqp::iterator targetIt = start + (end - start) / 2;
 	int itemNum = item.first;
@@ -155,11 +187,15 @@ deqp PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iter
 deqp PmergeMe:: restore(deqp &winners, deqr & losers)
 {
 	deqp losers_sorted(winners.size());
-	for (int i = 0; i < winners.size(); i++)
+	for (size_t i = 0; i < winners.size(); i++)
 	{
+		int losInd = winners[i].second;
+		deqi triple = losers[losInd];
+		int losNum = triple[0];
+		int losPrevInd = triple[1];
 		pair elem = std::make_pair(
-			losers[winners[i].second][0], 
-			losers[winners[i].second][1]); 
+			losNum, 
+			losPrevInd); 
 		losers_sorted[i] = elem;	
 		winners[i].second = losers[winners[i].second][2];
 	}

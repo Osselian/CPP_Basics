@@ -6,8 +6,7 @@
 typedef std::deque<int> deqi;
 typedef std::pair<int, int> pair;
 typedef std::deque<pair> deqp;
-typedef std::deque<int [3]> deqr;
-
+typedef std::deque<deqi> deqr;
 
 class PmergeMe
 {
@@ -15,11 +14,12 @@ class PmergeMe
 		deqi _unordered;
 		deqi _sorted;
 		void convert(char **args);
-		deqp &mergeInsertionSort(deqp & nums);
+		deqp mergeInsertionSort(deqp & nums);
 		deqp getInsertionGroup(int groupLen, int start, deqp & nums);
 		void binaryInsert(deqp & nums, deqp & group);
-		deqp binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end);
+		void binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end);
 		deqp restore(deqp & winners, deqr & losers);
+		deqp createDeqp();
 	public:
 		PmergeMe();
 		PmergeMe(const PmergeMe & origin);
