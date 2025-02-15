@@ -1,9 +1,4 @@
 #include "PmergeMe.hpp"
-#include <cerrno>
-#include <climits>
-#include <cmath>
-#include <cstdlib>
-#include <utility>
 
 PmergeMe:: PmergeMe()
 {
@@ -29,15 +24,15 @@ PmergeMe::~PmergeMe()
 {
 }
 
-std::deque<int> &PmergeMe:: sort(char **args)
+std::deque<int> PmergeMe:: sort(char **args)
 {
 	convert(args);
 	deqp nums = createDeqp();
+	if (_unordered.size() == 1)
+		return _unordered;
 	deqp result = mergeInsertionSort(nums);
 	for (size_t i = 0; i < result.size(); i++)
-	{
 		_sorted.push_back(result[i].first);
-	}
 	return _sorted;
 }
 
@@ -71,6 +66,16 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 	size_t amount = nums.size() / 2;
 	deqp winners;
 	deqr losers;
+	fillPairs(nums, amount, winners, losers);
+	if (amount > 1)
+		winners = mergeInsertionSort(winners);
+
+	merge(winners, losers, nums);
+	return winners;
+}
+
+void PmergeMe:: fillPairs(deqp & nums, size_t amount, deqp & winners, deqr & losers)
+{
 	for (size_t j = 0; j < amount; j++)
 	{
 		int ind = 2 * j;
@@ -93,42 +98,17 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 		winners.push_back(win);
 		losers.push_back(los);
 	}
-	if (amount > 1)
-		winners = mergeInsertionSort(winners);
-	if (amount == 1)
-	{
-		pair first = std::make_pair(losers[0][0], losers[0][1]);
-		winners[0].second = losers[0][2];
-		winners.push_front(first);
-		if (nums.size() % 2 == 1)
-		{
-			pair item = nums[nums.size() - 1];
-			int i;
-			if (winners[0].first >= item.first)
-				i = 0;
-			else if (winners[0].first < item.first && item.first < winners[0].first)
-				i = 1;
-			else
-				i = 2;
-			// item.second = i;
-			winners.insert(winners.begin() + i, item);
-		}
-		return winners;
-	}
+}
 
-	deqp sorted_losers;
-	if (amount != 1)
-		sorted_losers = restore(winners, losers);
+void PmergeMe::  merge(deqp & winners, deqr & losers, deqp &nums)
+{
+	deqp sorted_losers = restore(winners, losers);
 	winners.push_front(sorted_losers[0]);
 	sorted_losers.pop_front();
-	// result.push_back(winners[0]);
 	if (nums.size() % 2 == 1)
-	{
 		sorted_losers.push_back(nums[nums.size() - 1]);
-		amount++;
-	}
-	// int resAmount = nums.size();
-	int rest = amount - 1;
+
+	long rest = sorted_losers.size();
 	int last = 0;
 	int i = 1;
 	int groupLen = pow(2, i);
@@ -141,7 +121,24 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 		last += groupLen;
 		groupLen = pow(2, i) - groupLen;
 	}
-	return winners;
+}
+
+deqp PmergeMe:: restore(deqp &winners, deqr & losers)
+{
+	deqp losers_sorted(winners.size());
+	for (size_t i = 0; i < winners.size(); i++)
+	{
+		int losInd = winners[i].second;
+		deqi triple = losers[losInd];
+		int losNum = triple[0];
+		int losPrevInd = triple[1];
+		pair elem = std::make_pair(
+			losNum, 
+			losPrevInd); 
+		losers_sorted[i] = elem;	
+		winners[i].second = losers[winners[i].second][2];
+	}
+	return losers_sorted;
 }
 
 deqp PmergeMe:: getInsertionGroup(int groupLen, int start, deqp  & nums)
@@ -185,22 +182,4 @@ void PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iter
 		else
 			binsert(item, nums, start, targetIt);
 	}
-}
-
-deqp PmergeMe:: restore(deqp &winners, deqr & losers)
-{
-	deqp losers_sorted(winners.size());
-	for (size_t i = 0; i < winners.size(); i++)
-	{
-		int losInd = winners[i].second;
-		deqi triple = losers[losInd];
-		int losNum = triple[0];
-		int losPrevInd = triple[1];
-		pair elem = std::make_pair(
-			losNum, 
-			losPrevInd); 
-		losers_sorted[i] = elem;	
-		winners[i].second = losers[winners[i].second][2];
-	}
-	return losers_sorted;
 }

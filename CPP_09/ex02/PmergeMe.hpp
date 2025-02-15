@@ -1,6 +1,11 @@
 #ifndef PMERGEME
 # define PMERGEME
 
+#include <cerrno>
+#include <climits>
+#include <cmath>
+#include <cstdlib>
+#include <utility>
 #include <deque>
 
 typedef std::deque<int> deqi;
@@ -20,13 +25,15 @@ class PmergeMe
 		void binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end);
 		deqp restore(deqp & winners, deqr & losers);
 		deqp createDeqp();
+		void fillPairs(deqp & nums, size_t amount, deqp & winners, deqr & losers);
+		void merge(deqp & winners, deqr & losers, deqp & nums);
 	public:
 		PmergeMe();
 		PmergeMe(const PmergeMe & origin);
 		const PmergeMe &operator=(const PmergeMe &other);
 		~PmergeMe();
 
-		deqi &sort(char **args);
+		deqi sort(char **args);
 };
 
 #endif
