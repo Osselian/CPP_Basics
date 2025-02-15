@@ -71,23 +71,24 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 	size_t amount = nums.size() / 2;
 	deqp winners;
 	deqr losers;
-	for (size_t i = 0; i < nums.size() - 1; i+=2)
+	for (size_t j = 0; j < amount; j++)
 	{
+		int ind = 2 * j;
 		pair win;
 		deqi los(3);
-		if (nums[i].first > nums[i + 1].first)
+		if (nums[ind].first > nums[ind + 1].first)
 		{
-			win = std::make_pair(nums[i].first, i) ;	
-			los[0] = nums[i + 1].first;
-			los[1] = nums[i + 1].second;
-			los[2] = nums[i].second;
+			win = std::make_pair(nums[ind].first, j) ;	
+			los[0] = nums[ind + 1].first;
+			los[1] = nums[ind + 1].second;
+			los[2] = nums[ind].second;
 		}
 		else
 		{
-			win = std::make_pair(nums[i + 1].first, i) ;	
-			los[0] = nums[i].first;
-			los[1] = nums[i].second;
-			los[2] = nums[i + 1].second;
+			win = std::make_pair(nums[ind + 1].first, j) ;	
+			los[0] = nums[ind].first;
+			los[1] = nums[ind].second;
+			los[2] = nums[ind + 1].second;
 		}
 		winners.push_back(win);
 		losers.push_back(los);
@@ -99,17 +100,17 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 		pair first = std::make_pair(losers[0][0], losers[0][1]);
 		winners[0].second = losers[0][2];
 		winners.push_front(first);
-		if (amount % 2 == 1)
+		if (nums.size() % 2 == 1)
 		{
 			pair item = nums[nums.size() - 1];
 			int i;
-			if (winners[0].first > item.first)
+			if (winners[0].first >= item.first)
 				i = 0;
 			else if (winners[0].first < item.first && item.first < winners[0].first)
 				i = 1;
 			else
 				i = 2;
-			item.second = i;
+			// item.second = i;
 			winners.insert(winners.begin() + i, item);
 		}
 		return winners;
@@ -119,8 +120,9 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 	if (amount != 1)
 		sorted_losers = restore(winners, losers);
 	winners.push_front(sorted_losers[0]);
+	sorted_losers.pop_front();
 	// result.push_back(winners[0]);
-	if (amount % 2 == 1)
+	if (nums.size() % 2 == 1)
 	{
 		sorted_losers.push_back(nums[nums.size() - 1]);
 		amount++;
@@ -136,6 +138,7 @@ deqp PmergeMe:: mergeInsertionSort(deqp & nums)
 		binaryInsert(winners, toInsert);
 		rest -= groupLen;
 		i++;
+		last += groupLen;
 		groupLen = pow(2, i) - groupLen;
 	}
 	return winners;
@@ -157,7 +160,7 @@ void PmergeMe:: binaryInsert(deqp  & result, deqp & group)
 {
 	size_t size = group.size();
 	
-	for (int i = size -1; i > 0; i--)
+	for (int i = size - 1; i >= 0; i--)
 	{
 		binsert(group[i], result, result.begin(), result.end());
 	}
