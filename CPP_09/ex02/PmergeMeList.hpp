@@ -22,8 +22,8 @@ class PmergeMeList
 		void convert(char **args);
 		listp mergeInsertionSort(listp & nums);
 		listp getInsertionGroup(int groupLen, int start, listp & nums);
-		void binaryInsert(listp & nums, listp & group);
-		void binsert(pair item, listp & nums, list_it iters, size_t size);
+		void binaryInsert(listp & nums, listp & group, listp::iterator end);
+		listp::iterator binsert(pair item, listp & nums, list_it iters, size_t size);
 		listp restore(listp & winners, listr & losers);
 		listp createDeqp();
 		void fillPairs(listp & nums, size_t amount, listp & winners, listr & losers);
