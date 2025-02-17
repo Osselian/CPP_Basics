@@ -31,12 +31,13 @@ long RPN::calculate(string dataRow)
 	while (divPos != string::npos)
 	{
 		string val = dataRow.substr(start, divPos);
-		if (val.empty())	
-			continue;
-		if (std::isdigit(val[0]))
-			accumulateValue(val);
-		else
-			doOperation(val);
+		if (!val.empty())	
+		{
+			if (std::isdigit(val[0]))
+				accumulateValue(val);
+			else
+				doOperation(val);
+		}
 		dataRow = dataRow.erase(0, val.size() + 1);
 		divPos = dataRow.find(' ');
 	}
