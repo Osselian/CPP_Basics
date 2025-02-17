@@ -3,19 +3,14 @@
 
 int main(int argc, char **argv) 
 {
-	(void)argc;
-	BitcoinExchange btcEx;
-	// try
-	// {
-	// 	btcEx.setMap("tests/tst1_data.csv");
-	// }
-	// catch(const std::exception& e)
-	// {
-	// 	std::cerr << e.what() << '\n';
-	// }
-
+	if (argc != 2)
+	{
+		std::cerr << "Wrong args number!\n";
+		return 1;
+	}
 	try
 	{
+		BitcoinExchange btcEx;
 		btcEx.setMap("data.csv");
 		btcEx.printCurrency(argv[1]);
 

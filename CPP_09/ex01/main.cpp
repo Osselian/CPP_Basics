@@ -3,8 +3,11 @@
 
 int main(int argc, char **argv) 
 {
-	if (argc > 2)
+	if (argc != 2)
+	{
+		std::cerr << "Wrong args number\n";
 		return 1;
+	}
 	RPN rpn;
 	try
 	{
