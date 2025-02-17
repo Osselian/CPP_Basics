@@ -136,8 +136,6 @@ void PmergeMeList::  merge(listp & winners, listr & losers, listp &nums)
 		listp toInsert = getInsertionGroup(groupLen, last, sorted_losers);
 		listp::iterator end = winners.begin();
 		std::advance(end, shift);
-		int endNum = (*end).first;
-		endNum+=0;
 		binaryInsert(winners, toInsert, end);
 		rest -= groupLen;
 		i++;
@@ -145,6 +143,74 @@ void PmergeMeList::  merge(listp & winners, listr & losers, listp &nums)
 		groupLen = pow(2, i) - groupLen;
 		shift = pow(2, i + 1) - 1;;
 	}
+}
+
+void PmergeMeList:: binaryInsert(listp  & result, listp & group, listp::iterator end)
+{
+	size_t size = result.size();
+	listp::reverse_iterator it_b = group.rbegin();
+	listp::reverse_iterator it_e = group.rend();
+	while (it_b != it_e)
+	{
+		listp::iterator it_res_b = result.begin();
+		listp::iterator it_res_m = result.begin();
+		std::advance(it_res_m, size / 2);
+		list_it iters;
+		iters.push_back(it_res_b);
+		iters.push_back(end);
+		iters.push_back(it_res_m);
+		pair item = *it_b;
+		listp::iterator in_it = binsert(item, result, iters, size / 2);
+		it_b++;
+		if (in_it == end)
+			end++;
+		else
+			end--;
+	}
+}
+
+listp::iterator PmergeMeList:: binsert(pair item, listp & nums, list_it iters, size_t size)
+{	
+	listp::iterator start = *iters.begin();
+	listp::iterator end = *(++(iters.begin()));
+	listp::iterator targetIt = *(--(iters.end()));
+	int itemNum = item.first;
+	int num = (*targetIt).first;
+	if (itemNum >= num)
+	{
+		if (targetIt == end)
+			nums.insert(++targetIt, item);
+		else
+		{
+			listp::iterator it_m = targetIt;
+			if (size / 2 == 0)
+				std::advance(it_m, 1);
+			else
+				std::advance(it_m, size / 2);
+			iters.clear();
+			targetIt++;
+			iters.push_back(targetIt);
+			iters.push_back(end);
+			iters.push_back(it_m);
+			end = binsert(item, nums, iters, size / 2);
+		}
+	}
+	else
+	{
+		if (targetIt == start)
+			nums.insert(targetIt, item);
+		else
+		{
+			listp::iterator it_m = start;
+			std::advance(it_m, size / 2);
+			iters.clear();
+			iters.push_back(start);
+			iters.push_back(targetIt);
+			iters.push_back(it_m);
+			end = binsert(item, nums, iters, size / 2);
+		}
+	}
+	return end;
 }
 
 listp PmergeMeList:: restore(listp &winners, listr & losers)
@@ -187,81 +253,4 @@ listp PmergeMeList:: getInsertionGroup(int groupLen, int start, listp  & nums)
 	}
 	res = listp (it_b, it_e);
 	return res;
-}
-
-void PmergeMeList:: binaryInsert(listp  & result, listp & group, listp::iterator end)
-{
-	size_t size = result.size();
-	listp::reverse_iterator it_b = group.rbegin();
-	listp::reverse_iterator it_e = group.rend();
-	// listp::iterator it_res_e = result.end();
-	// it_res_e--;
-	while (it_b != it_e)
-	{
-		listp::iterator it_res_b = result.begin();
-		int endNum = (*end).first;
-		endNum+=0;
-		listp::iterator it_res_m = result.begin();
-		std::advance(it_res_m, size / 2);
-		list_it iters;
-		iters.push_back(it_res_b);
-		iters.push_back(end);
-		iters.push_back(it_res_m);
-		pair item = *it_b;
-		listp::iterator in_it = binsert(item, result, iters, size / 2);
-		it_b++;
-		if (in_it == end)
-			end++;
-		else
-			end--;
-	}
-}
-
-listp::iterator PmergeMeList:: binsert(pair item, listp & nums, list_it iters, size_t size)
-{	
-	int endNum;
-	listp::iterator start = *iters.begin();
-	listp::iterator end = *(++(iters.begin()));
-	listp::iterator targetIt = *(--(iters.end()));
-	int itemNum = item.first;
-	int num = (*targetIt).first;
-	if (itemNum >= num)
-	{
-		if (targetIt == end)
-		{
-			nums.insert(++targetIt, item);
-			endNum = (*end).first;
-			endNum += 0;
-		}
-		else
-		{
-			listp::iterator it_m = targetIt;
-			if (size / 2 == 0)
-				std::advance(it_m, 1);
-			else
-				std::advance(it_m, size / 2);
-			iters.clear();
-			targetIt++;
-			iters.push_back(targetIt);
-			iters.push_back(end);
-			iters.push_back(it_m);
-			end = binsert(item, nums, iters, size / 2);
-		}
-	}
-	else
-	{
-		if (targetIt == start)
-			nums.insert(targetIt, item);
-		else
-		{
-			listp::iterator it_m = start;
-			std::advance(it_m, size / 2);
-			iters.clear();
-			iters.push_back(start);
-			iters.push_back(targetIt);
-			iters.push_back(it_m);
-			end = binsert(item, nums, iters, size / 2);
-		}
-	}
-	return end;
 }

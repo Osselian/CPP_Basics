@@ -1,4 +1,5 @@
 #include "PmergeMe.hpp"
+#include <ctime>
 
 PmergeMe:: PmergeMe()
 {
@@ -43,7 +44,7 @@ void PmergeMe:: convert(char **args)
 		char *end;
 		errno = 0;
 		long num = std::strtol(*args, &end, 10);	
-		if (errno == ERANGE || *args == end || num < 0 || num > INT_MAX)
+		if (errno == ERANGE || *args == end || *end != '\0' || num < 0 || num > INT_MAX)
 			throw std::exception();
 		_unordered.push_back(static_cast<int>(num));
 		args++;
@@ -112,14 +113,52 @@ void PmergeMe::  merge(deqp & winners, deqr & losers, deqp &nums)
 	int last = 0;
 	int i = 1;
 	int groupLen = pow(2, i);
+	size_t shift = pow(2, i + 1) - 1;
 	while (rest > 0)
 	{
+		if (shift > winners.size() - 1)
+			shift = winners.size() - 1;
 		deqp toInsert = getInsertionGroup(groupLen, last, sorted_losers);
-		binaryInsert(winners, toInsert);
+		deqp::iterator end = winners.begin();
+		std::advance(end, shift);
+		binaryInsert(winners, toInsert, shift);
 		rest -= groupLen;
 		i++;
 		last += groupLen;
 		groupLen = pow(2, i) - groupLen;
+		shift = pow(2, i + 1) - 1;
+	}
+}
+
+
+void PmergeMe:: binaryInsert(deqp  & result, deqp & group, size_t shift)
+{
+	size_t size = group.size();
+	
+	for (int i = size - 1; i >= 0; i--)
+	{
+		binsert(group[i], result, result.begin(), result.begin() + shift);
+	}
+}
+
+void PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end)
+{
+	deqp::iterator targetIt = start + (end - start) / 2;
+	int itemNum = item.first;
+	int num = (*targetIt).first;
+	if (itemNum >= num)
+	{
+		if (targetIt == end)
+			nums.insert(++targetIt, item);
+		else
+			binsert(item, nums, targetIt + 1, end);
+	}
+	else
+	{
+		if (targetIt == start)
+			nums.insert(targetIt, item);
+		else
+			binsert(item, nums, start, targetIt);
 	}
 }
 
@@ -151,35 +190,4 @@ deqp PmergeMe:: getInsertionGroup(int groupLen, int start, deqp  & nums)
 	else
 		res = deqp (it_b, it_b + groupLen);
 	return res;
-}
-
-void PmergeMe:: binaryInsert(deqp  & result, deqp & group)
-{
-	size_t size = group.size();
-	
-	for (int i = size - 1; i >= 0; i--)
-	{
-		binsert(group[i], result, result.begin(), result.end());
-	}
-}
-
-void PmergeMe:: binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end)
-{
-	deqp::iterator targetIt = start + (end - start) / 2;
-	int itemNum = item.first;
-	int num = (*targetIt).first;
-	if (itemNum >= num)
-	{
-		if (targetIt == end)
-			nums.insert(targetIt, item);
-		else
-			binsert(item, nums, targetIt + 1, end);
-	}
-	else
-	{
-		if (targetIt == start)
-			nums.insert(targetIt, item);
-		else
-			binsert(item, nums, start, targetIt);
-	}
 }

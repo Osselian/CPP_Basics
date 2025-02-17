@@ -21,7 +21,7 @@ class PmergeMe
 		void convert(char **args);
 		deqp mergeInsertionSort(deqp & nums);
 		deqp getInsertionGroup(int groupLen, int start, deqp & nums);
-		void binaryInsert(deqp & nums, deqp & group);
+		void binaryInsert(deqp & nums, deqp & group, size_t shift);
 		void binsert(pair item, deqp & nums, deqp::iterator start, deqp::iterator end);
 		deqp restore(deqp & winners, deqr & losers);
 		deqp createDeqp();
