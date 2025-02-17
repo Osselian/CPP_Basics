@@ -83,7 +83,7 @@ void RPN:: doOperation(string val)
 		res = first / second;
 		break;
 	default:
-		throw InvalidOperationException(val[0]);
+		throw InvalidExpressionException();
 	};
 	_nums.push(res);
 }

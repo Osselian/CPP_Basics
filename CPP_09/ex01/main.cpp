@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	try
 	{
 		long res = rpn.calculate(argv[1]);
-		std::cout << "RES: " << res << std::endl;
+		std::cout << res << std::endl;
 	}
 	catch(std::exception & ex)
 	{

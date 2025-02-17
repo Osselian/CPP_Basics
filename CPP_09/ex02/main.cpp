@@ -4,7 +4,12 @@
 
 int main(int argc, char **argv) 
 {
-	(void)argc;
+	if (argc == 1)
+	{
+		std::cout << "Wrong args number\n";
+		return 1;
+	}
+
 	double deqElapsed;
 	double listElapsed;
 	std::deque<int> result;
