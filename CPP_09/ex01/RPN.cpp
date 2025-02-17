@@ -47,6 +47,9 @@ long RPN::calculate(string dataRow)
 	if (_nums.empty())
 		throw InvalidExpressionException();
 	result = _nums.top();
+	_nums.pop();
+	if (!_nums.empty())
+		throw InvalidExpressionException();
 	return result;
 }
 
